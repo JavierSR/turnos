@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
-    <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>Turnos</title>
 </head>
 <body>
-    <div class="row m-0 justify-content-center text-center align-items-center vh-100">
-        <div class="col-12" >
-            <h3>Bienvenido usuario<br>selecione un modulo</h3>
+    <div class="app">
+        <div v-if="activeScreen === 'home'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <div class="col-12" >
+                <h3>Bienvenido usuario<br>selecione un modulo</h3>
+            </div>
+            <!-- <button-container v-for="number in 4" module-id="number" display-text="Modulo "></button-container> -->
+            <button-container module-id="1" display-text="Modulo"></button-container>
+            <button-container module-id="2" display-text="Modulo"></button-container>
+            <button-container module-id="3" display-text="Modulo"></button-container>
+            <button-container module-id="4" display-text="Modulo"></button-container>
         </div>
-        <div class="col-6">
-            <button onclick="location.href = 'op.html';" type="button" class="btn-lg btn-block btn-primary">Modulo 1</button>
-        </div>
-        <div class="col-6">
-            <button onclick="location.href = 'op.html';" type="button" class="btn-lg btn-block btn-primary">Modulo 2</button>
-        </div>
-        <div class="col-6">
-            <button onclick="location.href = 'op.html';" type="button" class="btn-lg btn-block btn-primary">Modulo 3</button>
-        </div>
-        <div class="col-6">
-            <button onclick="location.href = 'op.html';" type="button" class="btn-lg btn-block btn-primary">Modulo 4</button>
+        <div v-if="activeScreen === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <div class="col-12" >
+                <a>Modulo {{selectedModule}}</a>
+                <h3>Selecione una opción</h3>
+            </div>
+            <button-container module-id="0"  display-text="Imprimir turno"></button-container>
+            <button-container module-id="-1" display-text="Escanar QR turno"></button-container>
         </div>
     </div>
+    <script src="js/vue.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
