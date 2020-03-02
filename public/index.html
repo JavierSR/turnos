@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Turnos</title>
 </head>
 <body>
     <div class="app">
         <div v-if="activeScreen === 'home'" class="row m-0 justify-content-center text-center align-items-center vh-100">
             <div class="col-12" >
-                <h3>Bienvenido usuario<br>selecione un modulo</h3>
+                <h3>Bienvenido usuario<br>seleccione un modulo</h3>
             </div>
             <!-- <button-container v-for="number in 4" module-id="number" display-text="Modulo "></button-container> -->
             <button-container module-id="1" display-text="Modulo"></button-container>
@@ -22,7 +23,7 @@
         <div v-if="activeScreen === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
             <div class="col-12" >
                 <a>Modulo {{selectedModule}}</a>
-                <h3>Selecione una opción</h3>
+                <h3>Seleccione una opción</h3>
             </div>
             <button-container module-id="0"  display-text="Imprimir turno"></button-container>
             <button-container module-id="-1" display-text="Escanar QR turno"></button-container>
