@@ -15,18 +15,19 @@
                 <h3>Bienvenido usuario<br>seleccione un modulo</h3>
             </div>
             <!-- <button-container v-for="number in 4" module-id="number" display-text="Modulo "></button-container> -->
-            <button-container module-id="1" display-text="Modulo"></button-container>
-            <button-container module-id="2" display-text="Modulo"></button-container>
-            <button-container module-id="3" display-text="Modulo"></button-container>
-            <button-container module-id="4" display-text="Modulo"></button-container>
+            <button-container module-id="A" display-text="Modulo"></button-container>
+            <button-container module-id="B" display-text="Modulo"></button-container>
+            <button-container module-id="C" display-text="Modulo"></button-container>
+            <button-container module-id="D" display-text="Modulo"></button-container>
         </div>
         <div v-if="activeScreen === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <button v-on:click="displayHomeScreen" class="btn-lg btn-primary">Atras</button>
             <div class="col-12" >
                 <a>Modulo {{selectedModule}}</a>
                 <h3>Seleccione una opción</h3>
             </div>
-            <button-container module-id="0"  display-text="Imprimir turno"></button-container>
-            <button-container module-id="-1" display-text="Escanar QR turno"></button-container>
+            <button-get-turn turn-type="print"  display-text="Imprimir turno"></button-get-turn>
+            <button-get-turn turn-type="qr" display-text="Escanar QR turno"></button-get-turn>
         </div>
     </div>
     <script src="js/vue.js"></script>
