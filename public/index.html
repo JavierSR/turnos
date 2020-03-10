@@ -10,17 +10,15 @@
 </head>
 <body>
     <div class="app">
-        <div v-if="activeScreen == 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
+        <div v-if="activeScreen === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
             <h3 class="col-12">Digite su número de cedula</h3>
             <div class="w-50 row justify-content-center">
-                <input v-model="cedula" readonly type="text" class="col-10 mb-5 form-control">
+                <input v-model="identification" readonly type="text" class="col-11 mb-5 form-control">
                 <number-button v-for="index in 9" :number=index></number-button>
                 <div class="col-4 my-2">
                     <button class="col-8 btn-lg btn-primary"><-</button>
                 </div>
-                <div class="col-4 my-2">
-                    <button class="col-8 btn-lg btn-primary">0</button>
-                </div>
+                <number-button number="0"></number-button>
                 <div class="col-4 my-2">
                     <button class="col-8 btn-lg btn-primary">v</button>
                 </div>
@@ -30,7 +28,6 @@
             <div class="col-12" >
                 <h3>Bienvenido usuario<br>seleccione un modulo</h3>
             </div>
-            <!-- <button-container v-for="number in 4" module-id="number" display-text="Modulo "></button-container> -->
             <button-container module-id="A" display-text="Modulo"></button-container>
             <button-container module-id="B" display-text="Modulo"></button-container>
             <button-container module-id="C" display-text="Modulo"></button-container>

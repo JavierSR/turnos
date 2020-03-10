@@ -16,12 +16,13 @@ Vue.component('button-container', {
 Vue.component('number-button',{
     props   : ['number'],
     methods : {
-        addNumber: function() {
-            const actual = this.$parent._data.cedula
-            this._props.addNumber
+        writeInputValue: function() {
+            if(this.$parent._data.identification.length < 11) {
+                this.$parent._data.identification += this._props.number
+            }
         }
     },
-    template:  `<div v-onclick="addNumber" class="col-4 my-2">
+    template:  `<div v-on:click="writeInputValue" class="col-4 my-2">
                     <button class="col-8 btn-lg btn-primary">{{number}}</button>
                 </div>`
 })
@@ -58,8 +59,8 @@ const app = new Vue({
     el: '.app',
     data: {
         selectedModule : null,
+        identification : '',
         activeScreen   : 'home',
-        cedula         : ''
     },
     methods: {
         displayHomeScreen: function(){
