@@ -13,6 +13,19 @@ Vue.component('button-container', {
                 </div>`
 })
 
+Vue.component('number-button',{
+    props   : ['number'],
+    methods : {
+        addNumber: function() {
+            const actual = this.$parent._data.cedula
+            this._props.addNumber
+        }
+    },
+    template:  `<div v-onclick="addNumber" class="col-4 my-2">
+                    <button class="col-8 btn-lg btn-primary">{{number}}</button>
+                </div>`
+})
+
 Vue.component('button-get-turn', {
     props    : ['displayText', 'turnType'],
     methods  : {
@@ -45,7 +58,8 @@ const app = new Vue({
     el: '.app',
     data: {
         selectedModule : null,
-        activeScreen   : 'home'
+        activeScreen   : 'home',
+        cedula         : ''
     },
     methods: {
         displayHomeScreen: function(){

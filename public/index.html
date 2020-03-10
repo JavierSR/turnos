@@ -10,7 +10,23 @@
 </head>
 <body>
     <div class="app">
-        <div v-if="activeScreen === 'home'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+        <div v-if="activeScreen == 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
+            <h3 class="col-12">Digite su número de cedula</h3>
+            <div class="w-50 row justify-content-center">
+                <input v-model="cedula" readonly type="text" class="col-10 mb-5 form-control">
+                <number-button v-for="index in 9" :number=index></number-button>
+                <div class="col-4 my-2">
+                    <button class="col-8 btn-lg btn-primary"><-</button>
+                </div>
+                <div class="col-4 my-2">
+                    <button class="col-8 btn-lg btn-primary">0</button>
+                </div>
+                <div class="col-4 my-2">
+                    <button class="col-8 btn-lg btn-primary">v</button>
+                </div>
+            </div>
+        </div>
+        <div v-if="activeScreen === 'moduleSelector'" class="row m-0 justify-content-center text-center align-items-center vh-100">
             <div class="col-12" >
                 <h3>Bienvenido usuario<br>seleccione un modulo</h3>
             </div>
@@ -27,7 +43,7 @@
                 <h3>Seleccione una opción</h3>
             </div>
             <button-get-turn turn-type="print"  display-text="Imprimir turno"></button-get-turn>
-            <button-get-turn turn-type="qr" display-text="Escanar QR turno"></button-get-turn>
+            <button-get-turn turn-type="qr" display-text="Escanear QR turno"></button-get-turn>
         </div>
     </div>
     <script src="js/vue.js"></script>
