@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/2dfc06e399.js" crossorigin="anonymous"></script>
     <title>Turnos</title>
 </head>
 <body>
@@ -13,14 +14,14 @@
         <div v-if="activeScreen === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
             <h3 class="col-12">Digite su número de cedula</h3>
             <div class="w-50 row justify-content-center">
-                <input v-model="identification" readonly type="text" class="col-11 mb-5 form-control">
+                <input id="cedula" readonly type="text" class="col-11 mb-5 form-control">
                 <number-button v-for="index in 9" :number=index></number-button>
-                <div class="col-4 my-2">
-                    <button class="col-8 btn-lg btn-primary"><-</button>
+                <div class="col-4 my-2" >
+                    <button onclick="borrar();" class="col-8 btn-lg btn-primary"><i class="fas fa-backspace"></i></button>
                 </div>
                 <number-button number="0"></number-button>
                 <div class="col-4 my-2">
-                    <button class="col-8 btn-lg btn-primary">v</button>
+                    <button onclick="okis();" class="col-8 btn-lg btn-primary"><i class="fas fa-check-circle"></i></button>
                 </div>
             </div>
         </div>
