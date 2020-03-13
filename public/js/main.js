@@ -17,13 +17,14 @@ Vue.component('number-button',{
     props   : ['number'],
     methods : {
         writeInputValue: function() {
-            if(this.$parent._data.identification.length < 11) {
-                this.$parent._data.identification += this._props.number
+            if(document.getElementById('cedula').value < 9999999999) {
+                document.getElementById('cedula').value+=this._props.number;
             }
-        }
+        },
+        
     },
-    template:  `<div v-on:click="writeInputValue" class="col-4 my-2">
-                    <button class="col-8 btn-lg btn-primary">{{number}}</button>
+    template:  `<div class="col-4 my-2">
+                    <button v-on:click="writeInputValue"  class="col-8 btn-lg btn-primary">{{number}}</button>
                 </div>`
 })
 
@@ -69,5 +70,11 @@ const app = new Vue({
     }
 })
 
+var borrar= function() {
+    var longitud  = document.getElementById('cedula').value;
+    document.getElementById('cedula').value=longitud.substring(0,longitud.length -1);
+}
 
-
+var okis= function(){
+    console.log(document.getElementById('cedula').value);
+}
