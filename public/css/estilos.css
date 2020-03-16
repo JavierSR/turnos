@@ -1,3 +1,18 @@
 .btn-block{
     height: 18vh;
 }
+
+.identification-container {
+    margin-top: -20%;
+}
+
+.identification-input {
+    width: 98% !important;
+    margin: auto;
+    font-size: 200% !important;
+    letter-spacing: 0.1em;
+}
+
+.hidden {
+    display: none;
+}

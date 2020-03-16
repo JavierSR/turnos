@@ -4,15 +4,7 @@ const   express     = require('express'),
         controller  = require('./controller')
         validations = require('./validations')
 
-router.post('/', (req, res) => {
-    response.error({
-        response     : res,
-        status       : 400,
-        text         : 'Recurso solicitado no existe'
-    })
-})
-
-router.post('/api/newTurn', (req, res) => {
+router.post('/api/turn', (req, res) => {
     const isValidData = validations.checkData(req.body)
     if (!isValidData.state) {
         response.error({
@@ -42,7 +34,7 @@ router.post('/api/newTurn', (req, res) => {
     }
 })
 
-router.patch('/api', (req, res) => {
+router.patch('/api/turn', (req, res) => {
     const isValidTurn = validations.checkTurnNumber(req.body)
     if (!isValidTurn.state) {
         response.error({

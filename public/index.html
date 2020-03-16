@@ -5,27 +5,31 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Pendiente cambiar cdn por estaticos -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://kit.fontawesome.com/2dfc06e399.js" crossorigin="anonymous"></script>
     <title>Turnos</title>
 </head>
 <body>
     <div class="app">
-        <div v-if="activeScreen === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
+        <div v-if="screens.active === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
             <h3 class="col-12">Digite su número de cedula</h3>
-            <div class="w-50 row justify-content-center">
-                <input id="cedula" readonly type="text" class="col-11 mb-5 form-control">
-                <number-button v-for="index in 9" :number=index></number-button>
+            <div class="w-50 row justify-content-center identification-container">
+                <p v-bind:class="{hidden: isValidIdentification}" class='alert alert-warning'>El número ingresado no es una cedula válida</p>
+                <div class="col-11 mb-5">
+                    <input v-model="identification" readonly type="text" class="identification-input form-control">
+                </div>
+                <number-button v-for="index in 9" :number=index v-bind:key=index></number-button>
                 <div class="col-4 my-2" >
-                    <button onclick="borrar();" class="col-8 btn-lg btn-primary"><i class="fas fa-backspace"></i></button>
+                    <button v-on:click="eraseNumber" class="col-8 btn-lg btn-primary"><i class="fas fa-backspace"></i></button>
                 </div>
                 <number-button number="0"></number-button>
                 <div class="col-4 my-2">
-                    <button onclick="okis();" class="col-8 btn-lg btn-primary"><i class="fas fa-check-circle"></i></button>
+                    <button v-on:click="validateIdentification()" class="col-8 btn-lg btn-primary"><i class="fas fa-check-circle"></i></button>
                 </div>
             </div>
         </div>
-        <div v-if="activeScreen === 'moduleSelector'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+        <div v-if="screens.active === 'moduleSelector'" class="row m-0 justify-content-center text-center align-items-center vh-100">
             <div class="col-12" >
                 <h3>Bienvenido usuario<br>seleccione un modulo</h3>
             </div>
@@ -34,8 +38,8 @@
             <button-container module-id="C" display-text="Modulo"></button-container>
             <button-container module-id="D" display-text="Modulo"></button-container>
         </div>
-        <div v-if="activeScreen === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
-            <button v-on:click="displayHomeScreen" class="btn-lg btn-primary">Atras</button>
+        <div v-if="screens.active === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <button v-on:click="changeScreen(screens.previus)" class="btn-lg btn-primary">Atras</button>
             <div class="col-12" >
                 <a>Modulo {{selectedModule}}</a>
                 <h3>Seleccione una opción</h3>

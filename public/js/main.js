@@ -2,8 +2,8 @@ Vue.component('button-container', {
     props    : ['displayText', 'moduleId'],
     methods  : {
         displayTurnScreen: function() {
-            this.$parent._data.selectedModule = this._props.moduleId
-            this.$parent._data.activeScreen   = 'printTurn'
+            this.$parent.selectedModule = this.moduleId
+            this.$parent.changeScreen('printTurn')
         }
     },
     template : `<div class="col-6">
@@ -17,8 +17,8 @@ Vue.component('number-button',{
     props   : ['number'],
     methods : {
         writeInputValue: function() {
-            if(document.getElementById('cedula').value < 9999999999) {
-                document.getElementById('cedula').value+=this._props.number;
+            if(this.$parent.identification.length < 10) {
+                this.$parent.identification += this.number
             }
         },
         
@@ -31,26 +31,28 @@ Vue.component('number-button',{
 Vue.component('button-get-turn', {
     props    : ['displayText', 'turnType'],
     methods  : {
-        pedirTurno: function () {
+        requestTurn: function () {
             const sendData = {
-                user: '1121946367',
-                turnType: this.turnType,
-                module: this.$parent._data.selectedModule
+                user     : this.$parent.identification,
+                turnType : this.turnType,
+                module   : this.$parent.selectedModule
             }
-            console.log('SendData', sendData)
+            console.log('sendData', sendData)
             $.ajax({
-                url: '127.0.0.1:3000/api/newTurn',    
+                url: '127.0.0.1:3000/api/turn',    
                 method: 'post', 
                 data: JSON.stringify(sendData),                
                 dataType: 'json',
                 contentType: "application/json"           
             }).done((response) => {
-                console.log("algoo", response)
-            });
+                console.log(">>>", response)
+            }).fail((response) => {
+                console.error(response)
+            })
         }
     },
     template : `<div class="col-6">
-                    <button  v-on:click="pedirTurno" class="btn-lg btn-block btn-primary">
+                    <button  v-on:click="requestTurn" class="btn-lg btn-block btn-primary">
                         {{displayText}}
                     </button>
                 </div>`
@@ -61,20 +63,29 @@ const app = new Vue({
     data: {
         selectedModule : null,
         identification : '',
-        activeScreen   : 'home',
+        screens        : {
+            active  : 'home',
+            previus : null
+        },
+        isValidIdentification: true,
     },
     methods: {
-        displayHomeScreen: function(){
-            this.activeScreen = 'home'
+        changeScreen: function(screen){
+            this.screens.previus = this.screens.active
+            this.screens.active  = screen
         },
+        eraseNumber: function() {
+            this.identification = this.identification.substring(0, this.identification.length -1)
+        },
+        validateIdentification: function() {
+            if(this.identification.length > 4 && parseInt(this.identification)) {
+                this.changeScreen('moduleSelector')
+            }
+            else {
+                this.isValidIdentification = false
+                this.identification        = ''
+            }
+        }
     }
+
 })
-
-var borrar= function() {
-    var longitud  = document.getElementById('cedula').value;
-    document.getElementById('cedula').value=longitud.substring(0,longitud.length -1);
-}
-
-var okis= function(){
-    console.log(document.getElementById('cedula').value);
-}
