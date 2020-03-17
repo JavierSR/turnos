@@ -1,5 +1,7 @@
-const   db    = require('mongoose'),
-        Model = require('./model')
+const   db          = require('mongoose'),
+        Model       = require('./model'),
+        response    = require('./response'),
+        validations = require('./validations')
 
 db.Promise = global.Promise
 db.connect('mongodb+srv://turnos_admin:turnos_admin@cluster0-16idh.mongodb.net/turnos', {
@@ -7,13 +9,14 @@ db.connect('mongodb+srv://turnos_admin:turnos_admin@cluster0-16idh.mongodb.net/t
     useUnifiedTopology: true
 })
 
-console.log('controller.js >> Conectado a la base de datos')
+console.log('[controller] Conectado a la base de datos')
 
 const getYesterdayDate = () => {
     const date = new Date()
     date.setDate(date.getDate() - 1)
     return date
 }
+
 const getTurnNumber = async (moduleId) =>  {
     //Obtiene la cantidad de turnos generados hoy para el modulo seleccionado
     let turnsCount = await Model.countDocuments({
@@ -22,45 +25,108 @@ const getTurnNumber = async (moduleId) =>  {
         },
         module: moduleId
     })
-    console.log(`controller.js >> Cantidad de turnos hoy en modulo ${moduleId}: ${turnsCount}`)
+    console.log(`[controller] Cantidad de turnos hoy en modulo ${moduleId}: ${turnsCount}`)
     //Retorna el nombre del modulo seguido del proximo numero de turno disponible
     return `${moduleId}-${++turnsCount}`
 }
 
 module.exports = {
-    newTurn : (userData) => {
-        return new Promise(async (resolve) => {
+    newTurn : async (userData, res) => {
+        const isValidData = validations.checkData(userData)
+        if (!isValidData.state) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : isValidData.text,
+                errorDetails : isValidData.errorDetails
+            })
+        }
+        else {
             //Pendiente validar que userData.module exista despues de agregar creacion de modulos
             userData.module  = userData.module.toUpperCase()
-            const turnNumber = await getTurnNumber(userData.module)
-            const turn = new Model({...userData,
-                date       : new Date(),
-                turnNumber : turnNumber,
-                active     : true
-            })
-    
+            const turnNumber = await getTurnNumber(userData.module),
+                  turn       = new Model({...userData,
+                                date       : new Date(),
+                                turnNumber : turnNumber,
+                                active     : true
+                            })
+
             turn.save()
-            console.log('controller.js >> Turno solicitado', turn)
-            resolve(turnNumber)
-        })
+            console.log('[controller] Turno solicitado', turn)
+            response.success({
+                response: res,
+                text    : turnNumber,
+                status  : 201
+            })
+        }
     },
-    finishTurn : (userData) => {
-        return new Promise(async (resolve, reject) => {
+    finishTurn : async (userData, res) => {
+        const isValidTurn = validations.checkTurnNumber(userData)
+        if (!isValidTurn.state) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : isValidTurn.text,
+                errorDetails : isValidTurn.errorDetails
+            })
+        }
+        else {
             const turn = await Model.findOne({
+                date: {
+                    $gt: getYesterdayDate()
+                },
                 turnNumber : userData.turnNumber
             })
             
             if(!turn) {
-                reject('El turno enviado no existe')
+                response.error({
+                    response     : res,
+                    status       : 400,
+                    text         : 'El turno enviado no existe'
+                })
             }
             else {
                 turn.active = false
                 turn.save()
-                console.log('controller.js >> Turno despachado ', userData.turnNumber)
-                resolve()
+                console.log('[controller] Turno despachado ', userData.turnNumber)
+                response.success({
+                    response: res
+                })
             }
-        })         
+        }
     },
-    turnDetails : () => {
+    turnDetails : async (userData, res) => {
+        const isValidTurn = validations.checkTurnNumber(userData)
+        if (!isValidTurn.state) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : isValidTurn.text,
+                errorDetails : isValidTurn.errorDetails
+            })
+        }
+        else {
+            const turn = await Model.findOne({
+                date: {
+                    $gt: getYesterdayDate()
+                },
+                turnNumber : userData.turnNumber
+            })
+            
+            if(!turn) {
+                response.error({
+                    response     : res,
+                    status       : 400,
+                    text         : 'El turno enviado no existe'
+                })
+            }
+            else {
+                console.log('[controller] Devolviendo información de turno ', turn)
+                response.success({
+                    response: res,
+                    text    : JSON.stringify(turn)
+                })
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ exports.success = (args) => {
 
 exports.error = (args) => {
     if(args.errorDetails) {
-        console.error('response.js >> ', args.errorDetails)
+        console.error('[_response_] ', args.errorDetails)
     }
     args.response.status(args.status || 500).send({
         state: false,
