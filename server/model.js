@@ -10,4 +10,14 @@ const turnSchema = new Schema({
         active     : Boolean
 })
 
-module.exports = mongoose.model('turnlist', turnSchema)
+const moduleSchema = new Schema({
+        moduleLetter : String,
+        description  : String,
+        author       : String,
+        created      : Date
+})
+
+module.exports = {
+        Turn   : mongoose.model('turnlist', turnSchema),
+        Module : mongoose.model('modules', moduleSchema)
+}

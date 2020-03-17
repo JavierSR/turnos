@@ -1,5 +1,5 @@
 const   db          = require('mongoose'),
-        Model       = require('./model'),
+        model       = require('./model'),
         response    = require('./response'),
         validations = require('./validations')
 
@@ -19,7 +19,7 @@ const getYesterdayDate = () => {
 
 const getTurnNumber = async (moduleId) =>  {
     //Obtiene la cantidad de turnos generados hoy para el modulo seleccionado
-    let turnsCount = await Model.countDocuments({
+    let turnsCount = await model.Turn.countDocuments({
         date: {
             $gt: getYesterdayDate()
         },
@@ -45,7 +45,7 @@ module.exports = {
             //Pendiente validar que userData.module exista despues de agregar creacion de modulos
             userData.module  = userData.module.toUpperCase()
             const turnNumber = await getTurnNumber(userData.module),
-                  turn       = new Model({...userData,
+                  turn       = new model.Turn({...userData,
                                 date       : new Date(),
                                 turnNumber : turnNumber,
                                 active     : true
@@ -71,7 +71,7 @@ module.exports = {
             })
         }
         else {
-            const turn = await Model.findOne({
+            const turn = await model.Turn.findOne({
                 date: {
                     $gt: getYesterdayDate()
                 },
@@ -106,7 +106,7 @@ module.exports = {
             })
         }
         else {
-            const turn = await Model.findOne({
+            const turn = await model.Turn.findOne({
                 date: {
                     $gt: getYesterdayDate()
                 },
