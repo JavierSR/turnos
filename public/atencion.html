@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Pendiente cambiar cdn por estaticos -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Turnos</title>
+</head>
+<body>
+    <div class="app">
+        <div class="row m-0 vh-100 text-center align-items-center justify-content-center">
+            <h3 id="estado" class="col-12">En espera...</h3>
+            <div class="w-50 row justify-content-center">
+                <button onclick="arrive()" id="attend" class="col-4 btn-lg btn-primary disabled">En modulo</button>
+                <button class="col-6 ml-5 btn-lg btn-primary">Siguiente</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
