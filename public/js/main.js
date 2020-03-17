@@ -69,10 +69,38 @@ const app = new Vue({
         },
         isValidIdentification: true,
         moduleList : [
-            'A',
-            'B',
-            'C',
-            'D'
+            {
+                "_id": "5e702ffa2cb5762540b7968c",
+                "description": "Primer modulo creado de forma dinamica",
+                "author": "Oscar",
+                "moduleLetter": "A",
+                "created": "2020-03-17T02:03:38.371Z",
+                "__v": 0
+            },
+            {
+                "_id": "5e7030292cb5762540b7968d",
+                "description": "Modulo de atencion al cliente",
+                "author": "Javier",
+                "moduleLetter": "B",
+                "created": "2020-03-17T02:04:25.210Z",
+                "__v": 0
+            },
+            {
+                "_id": "5e70382882bc7608b0e5e8b2",
+                "description": "Modulo de PQR",
+                "author": "Sandoval",
+                "moduleLetter": "C",
+                "created": "2020-03-17T02:38:32.995Z",
+                "__v": 0
+            },
+            {
+                "_id": "5e70383382bc7608b0e5e8b3",
+                "description": "Modulo dasdasdasd",
+                "author": "Royero",
+                "moduleLetter": "D",
+                "created": "2020-03-17T02:38:43.658Z",
+                "__v": 0
+            }
         ]
     },
     methods: {
@@ -97,8 +125,9 @@ const app = new Vue({
             document.getElementById("attend").disabled= true;
             document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
         },
-        displayAtend: function() {
-            this.changeScreen('Atend')
+        selectModule: function(module) {
+            this.selectedModule = module
+            this.changeScreen('moduleBody')
         }
     }
 

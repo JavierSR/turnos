@@ -1,5 +1,5 @@
 const   db          = require('mongoose'),
-        Model       = require('./model'),
+        model       = require('./model'),
         response    = require('./response'),
         validations = require('./validations')
 
@@ -19,7 +19,7 @@ const getYesterdayDate = () => {
 
 const getTurnNumber = async (moduleId) =>  {
     //Obtiene la cantidad de turnos generados hoy para el modulo seleccionado
-    let turnsCount = await Model.countDocuments({
+    let turnsCount = await model.Turn.countDocuments({
         date: {
             $gt: getYesterdayDate()
         },
@@ -45,7 +45,8 @@ module.exports = {
             //Pendiente validar que userData.module exista despues de agregar creacion de modulos
             userData.module  = userData.module.toUpperCase()
             const turnNumber = await getTurnNumber(userData.module),
-                  turn       = new Model({...userData,
+                  turn       = new model.Turn({
+                                ...userData,
                                 date       : new Date(),
                                 turnNumber : turnNumber,
                                 active     : true
@@ -55,8 +56,7 @@ module.exports = {
             console.log('[controller] Turno solicitado', turn)
             response.success({
                 response: res,
-                text    : turnNumber,
-                status  : 201
+                text    : turnNumber
             })
         }
     },
@@ -71,7 +71,7 @@ module.exports = {
             })
         }
         else {
-            const turn = await Model.findOne({
+            const turn = await model.Turn.findOne({
                 date: {
                     $gt: getYesterdayDate()
                 },
@@ -106,7 +106,7 @@ module.exports = {
             })
         }
         else {
-            const turn = await Model.findOne({
+            const turn = await model.Turn.findOne({
                 date: {
                     $gt: getYesterdayDate()
                 },
@@ -127,6 +127,37 @@ module.exports = {
                     text    : JSON.stringify(turn)
                 })
             }
+        }
+    },
+    newModule: async (userData, res) => {
+        const module = new model.Module({
+                            ...userData,
+                            created : new Date()
+                        })
+
+        module.save()
+        console.log('[controller] Modulo creado', module)
+        response.success({
+            response: res
+        })
+    },
+    getModules: async (res) => {
+        const   modules      = await model.Module.find({}),
+                modulesCount = modules.length
+
+        if(modulesCount) {
+            console.log(`[controller] Recuperando información de ${modulesCount} módulo${modulesCount > 1 ? 's' : ''}`)
+            response.success({
+                response : res,
+                text     : modules
+            })
+        }
+        else {
+            response.error({
+                response : res,
+                status   : 201,
+                text     : 'No se encontró ningun módulo creado'
+            })
         }
     }
 }
