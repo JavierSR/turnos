@@ -14,12 +14,12 @@ router.patch('/api/turn', (req, res) => {
     controller.finishTurn(req.body, res)
 })
 
-router.post('/api/module', (req, res) => {
-    controller.newModule(req.body, res)
+router.get('/api/module', (req, res) => {
+    controller.getModules(res)
 })
 
-router.delete('/api/module', (req, res) => {
-    controller.deleteModule(req.body, res)
+router.post('/api/module', (req, res) => {
+    controller.newModule(req.body, res)
 })
 
 module.exports = router
