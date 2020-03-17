@@ -13,7 +13,7 @@
     <div class="app">
         <div v-if="screens.active === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
             <h3 class="col-12">Modulo a atender</h3>
-            <button v-for="m in moduleList" v-on:click="displayAtend" class="col-4 btn-lg btn-primary mx-3">{{moduleList.m}}</button>
+            <button v-for="m in moduleList" v-on:click="displayAtend" class="col-4 btn-lg btn-primary mx-3">{{moduleList}}</button>
         </div>
 
         <div v-if="screens.active === 'Atend'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
