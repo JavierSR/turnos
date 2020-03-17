@@ -69,10 +69,10 @@ const app = new Vue({
         },
         isValidIdentification: true,
         moduleList : [
-            {module : "A"},
-            {module : "B"},
-            {module : "C"},
-            {module : "D"}
+            'A',
+            'B',
+            'C',
+            'D'
         ]
     },
     methods: {
