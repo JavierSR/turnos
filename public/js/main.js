@@ -68,6 +68,12 @@ const app = new Vue({
             previus : null
         },
         isValidIdentification: true,
+        moduleList : [
+            {module : "A"},
+            {module : "B"},
+            {module : "C"},
+            {module : "D"}
+        ]
     },
     methods: {
         changeScreen: function(screen){
@@ -90,6 +96,10 @@ const app = new Vue({
             document.getElementById("estado").innerHTML= "Atendiendo";
             document.getElementById("attend").disabled= true;
             document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
+        },
+        displayAtend: function() {
+            this.$parent.selectedModule = this.moduleId
+            this.$parent.changeScreen('Atend')
         }
     }
 
