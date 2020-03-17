@@ -89,3 +89,9 @@ const app = new Vue({
     }
 
 })
+
+function arrive(){
+    document.getElementById("estado").innerHTML= "Atendiendo";
+    document.getElementById("attend").disabled= true;
+    document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
+}
