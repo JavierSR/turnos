@@ -85,13 +85,12 @@ const app = new Vue({
                 this.isValidIdentification = false
                 this.identification        = ''
             }
+        },
+        arrive: function(){           
+            document.getElementById("estado").innerHTML= "Atendiendo";
+            document.getElementById("attend").disabled= true;
+            document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
         }
     }
 
 })
-
-function arrive(){
-    document.getElementById("estado").innerHTML= "Atendiendo";
-    document.getElementById("attend").disabled= true;
-    document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
-}
