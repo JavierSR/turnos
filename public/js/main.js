@@ -98,7 +98,7 @@ const app = new Vue({
             document.getElementById("attend").className= "col-4 btn-lg btn-outline-primary";
         },
         displayAtend: function() {
-            this.active = 'Atend'
+            this.changeScreen('Atend')
         }
     }
 
