@@ -5,18 +5,17 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome-free/css/all.min.css">
     <script src='js/jquery.min.js'></script>
     <script src='js/qrcode.min.js'></script>
     <script src='js/sweetalert2.js'></script>
     <script src='js/jspdf.min.js'></script>
-    <!-- Pendiente cambiar cdn por estaticos -->
-    <script src="https://kit.fontawesome.com/2dfc06e399.js" crossorigin="anonymous"></script>
     <title>Turnos</title>
 </head>
 <body>
     <div class="app">
         <div v-if="screens.active === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
-            <h3 class="col-12">Digite su número de cedula</h3>
+            <h3 class="col-12 pb-5">Digite su número de cedula</h3>
             <div class="w-50 row justify-content-center identification-container">
                 <p v-bind:class="{hidden: isValidIdentification}" class='alert alert-warning'>El número ingresado no es una cedula válida</p>
                 <div class="col-11 mb-5">
