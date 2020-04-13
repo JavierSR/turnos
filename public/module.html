@@ -14,30 +14,26 @@
 <body>
     <div class="app">
         <div class="row m-0 vh-100 align-items-center justify-content-center">
-            <h3 class="text-center col-12">Modulos</h3>
+            <h3 class="text-center col-12 mb-5">Creación de módulo</h3>
             <div class="col-4 justify-content-center identification-container">
                 <form action="">
-                    <label for="modulo">Identificador</label>
-                    <select id="modulo" class="form-control">
+                    <label for="letra">Letra identificadora</label>
+                    <select id="letra" class="form-control mb-3">
                         <option selected>Choose...</option>
-                        <script>
-                            var i=65;
-                            for(var i; i<=90;i++){
-                                document.write("<option>"+String.fromCharCode(i)+"</option>");
-                            }
-                        </script>
                     </select>
                     <label for="autor">Autor</label>
-                    <input type="text" id="autor" class="form-control">
+                    <input type="text" id="autor" class="form-control mb-3">
                     <label for="descripcion">Descripción</label>
-                    <textarea class="form-control" id="descripcion" rows="3"></textarea>
+                    <textarea class="form-control mb-3" id="descripcion" rows="3"></textarea>
                     <div class="text-center mt-4">
-                        <button type="button" class="btn btn-primary center-block">Crear módulo</button>
+                        <button type="button" id="crearModulo" class="btn btn-primary center-block">Crear módulo</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <script src="js/save.js"></script>
+    <script src="js/create.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/main.js"></script>
 </body>
