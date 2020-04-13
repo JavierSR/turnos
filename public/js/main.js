@@ -39,13 +39,44 @@ Vue.component('button-get-turn', {
             }
             console.log('sendData', sendData)
             $.ajax({
-                url: '127.0.0.1:3000/api/turn',    
+                url: 'http://localhost:3000/api/turn',    
                 method: 'post', 
                 data: JSON.stringify(sendData),                
                 dataType: 'json',
-                contentType: "application/json"           
+                contentType: 'application/json'
             }).done((response) => {
-                console.log(">>>", response)
+                console.log(response)
+                if (!response.state) {
+                    Swal.fire({
+                        text: 'Ocurrió un error en el servidor',
+                        icon:  'error'
+                    })
+                    return
+                }
+
+                if (sendData.turnType === 'qr') {
+                    Swal.fire({
+                        title : 'Escanee con la aplicación',
+                        html  : '<div class="qr-container"></div>'
+                    })
+                    new QRCode($('.qr-container')[0], response.text)
+                }
+                else if (sendData.turnType === 'print') {
+                    const pdf = new jsPDF()
+                    pdf.setFontSize(24)
+                    pdf.text(20, 20, 'Turno: ' + response.text)
+                    pdf.setFontSize(10)
+                    pdf.text(20, 40, 'Fecha y hora de impresión: ' + new Date ())
+                    // pdf.html(`
+                    //     <p>Turno: ${response.text}</p>
+                    //     <p style="font-size: 8px"> Fecha y hora de impresion: ${new Date()}</p>
+                    // `)
+                    console.log('this2', this)
+                    pdf.save(response.text + '.pdf')
+                }
+
+                this.$parent.changeScreen('home')
+                this.$parent.identification = ''
             }).fail((response) => {
                 console.error(response)
             })
