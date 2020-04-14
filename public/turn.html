@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <title>Turnos</title>
+</head>
+<body>
+    <div class="app">
+        <div v-if="screens.active === 'home'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
+            <h3 class="col-12 pb-5">Digite su número de cedula</h3>
+            <div class="w-50 row justify-content-center identification-container">
+                <p v-bind:class="{hidden: isValidIdentification}" class='alert alert-warning'>El número ingresado no es una cedula válida</p>
+                <div class="col-11 mb-5">
+                    <input v-model="identification" readonly type="text" class="identification-input form-control">
+                </div>
+                <number-button v-for="index in 9" :number=index v-bind:key=index></number-button>
+                <div class="col-4 my-2" >
+                    <button v-on:click="eraseNumber" class="col-8 btn-lg btn-primary"><i class="fas fa-backspace"></i></button>
+                </div>
+                <number-button number="0"></number-button>
+                <div class="col-4 my-2">
+                    <button v-on:click="validateIdentification()" class="col-8 btn-lg btn-primary"><i class="fas fa-check-circle"></i></button>
+                </div>
+            </div>
+        </div>
+        <div v-if="screens.active === 'moduleSelector'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <div class="col-12" >
+                <h3>Bienvenido usuario<br>seleccione un modulo</h3>
+            </div>
+            <button-module v-for="(module, index) in moduleList" 
+                :module-id="module.moduleLetter"
+                :description="module.description">
+            </button-module>
+        </div>
+        <div v-if="screens.active === 'printTurn'" class="row m-0 justify-content-center text-center align-items-center vh-100">
+            <button v-on:click="changeScreen(screens.previus)" class="btn-lg btn-primary">Atras</button>
+            <div class="col-12" >
+                <a>Modulo {{selectedModule.description}}</a>
+                <h3>Seleccione una opción</h3>
+            </div>
+            <button-get-turn turn-type="print"  display-text="Imprimir turno"></button-get-turn>
+            <button-get-turn turn-type="qr" display-text="Escanear QR turno"></button-get-turn>
+        </div>
+    </div>
+    <script src='js/lib/jquery.min.js'></script>
+    <script src='js/lib/qrcode.min.js'></script>
+    <script src='js/lib/sweetalert2.js'></script>
+    <script src='js/lib/jspdf.min.js'></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/turn.js"></script>
+</body>
+</html>
