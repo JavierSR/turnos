@@ -19,10 +19,9 @@
                 <form action="">
                     <label for="letra">Letra identificadora</label>
                     <select id="letra" class="form-control mb-3">
-                        <option selected>Choose...</option>
+                        <option selected></option>
                         <script>
-                            var i=65;
-                            for(var i; i<=90;i++){
+                            for(var i = 65; i <= 90; i++) {
                                 document.write("<option>"+String.fromCharCode(i)+"</option>");
                             }
                         </script>
@@ -40,6 +39,6 @@
     </div>
     <script src="js/save.js"></script>
     <script src="js/vue.js"></script>
-    <script src="js/main.js"></script>
+    <!-- <script src="js/main.js"></script> -->
 </body>
 </html>
