@@ -15,6 +15,7 @@ const app = new Vue({
             {link: 'admin.html', text: 'Portal administrativo', icon: 'user-tie'},
             {link: 'attend.html', text: 'Portal de atención', icon: 'concierge-bell'},
             {link: 'turn.html', text: 'Solicitar turnos', icon: 'ticket-alt'},
+            {link: 'screen.html', text: 'Pantalla de turnos', icon: 'desktop'},
         ]
     }
 })
