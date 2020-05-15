@@ -1,7 +1,7 @@
 Vue.component('main-button',{
     props   : ['link', 'text', 'icon'],
     template:  `<a v-bind:href="link" class='col-12'>
-                    <button  class="btn-lg btn-block btn-primary">
+                    <button class="btn-lg btn-block btn-primary">
                     <div>{{text}}</div> 
                     <i v-bind:class="'fas fa-' + icon"></i>
                     </button>

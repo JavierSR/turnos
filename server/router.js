@@ -14,12 +14,20 @@ router.patch('/api/turn', (req, res) => {
     controller.finishTurn(req.body, res)
 })
 
+router.get('/api/turnsHistory', (req, res) => {
+    controller.getTurns(res)
+})
+
 router.get('/api/module', (req, res) => {
     controller.getModules(res)
 })
 
 router.post('/api/module', (req, res) => {
     controller.newModule(req.body, res)
+})
+
+router.patch('/api/module', (req, res) => {
+    controller.editModule(req.body, res)
 })
 
 router.get('/api/letter', (req, res) => {

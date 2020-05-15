@@ -31,7 +31,7 @@ const getTurnNumber = async (moduleId) =>  {
 }
 
 module.exports = {
-    newTurn : async (userData, res) => {
+    newTurn: async (userData, res) => {
         const isValidData = validations.checkData(userData)
         if (!isValidData.state) {
             response.error({
@@ -47,9 +47,9 @@ module.exports = {
             const turnNumber = await getTurnNumber(userData.module),
                   turn       = new model.Turn({
                                 ...userData,
-                                date       : new Date(),
-                                turnNumber : turnNumber,
-                                active     : true
+                                requestTime : new Date(),
+                                turnNumber  : turnNumber,
+                                active      : true
                             })
 
             turn.save()
@@ -60,7 +60,7 @@ module.exports = {
             })
         }
     },
-    finishTurn : async (userData, res) => {
+    finishTurn: async (userData, res) => {
         const isValidTurn = validations.checkTurnNumber(userData)
         if (!isValidTurn.state) {
             response.error({
@@ -95,7 +95,7 @@ module.exports = {
             }
         }
     },
-    turnDetails : async (userData, res) => {
+    turnDetails: async (userData, res) => {
         const isValidTurn = validations.checkTurnNumber(userData)
         if (!isValidTurn.state) {
             response.error({
@@ -107,7 +107,7 @@ module.exports = {
         }
         else {
             const turn = await model.Turn.findOne({
-                date: {
+                requestTime: {
                     $gt: getYesterdayDate()
                 },
                 turnNumber : userData.turnNumber
@@ -129,6 +129,22 @@ module.exports = {
             }
         }
     },
+    getTurns: async (res) => {
+        const turns = await model.Turn.find({})
+
+        if(turns) {
+            console.log(`[controller] Recuperando información de ${turns.length} módulo${turns.length === 1 ? '' : 's'}`)
+            response.success({
+                response : res,
+                text     : turns
+            })
+        }
+        else {
+            response.error({
+                response : res
+            })
+        }
+    },
     newModule: async (userData, res) => {
         const module = new model.Module({
                             ...userData,
@@ -137,6 +153,19 @@ module.exports = {
 
         module.save()
         console.log('[controller] Modulo creado', module)
+        response.success({
+            response: res
+        })
+    },
+    editModule: async (userData, res) => {
+        const module = await model.Module.findOne({
+            moduleLetter: userData.moduleLetter
+        })
+
+        module.author = userData.author
+        module.description = userData.description
+        module.save()
+        console.log('[controller] Modulo actualizado', module)
         response.success({
             response: res
         })
@@ -161,9 +190,7 @@ module.exports = {
         }
     },
     nextLetter: async (res) => {
-        const   modules      = await model.Module.find({})
-
-        console.log('modules', modules)
+        const modules = await model.Module.find({})
         if (modules) {
             //Inicia en 65 que es el codigo de la letra 'A', y le suma la cantidad de modulos existentes, es decir si hay 3 modulos ABC 
             //devuelve 68 que es el codigo de la 'D'

@@ -1,27 +1,96 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang='es'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width,height=device-height,initial-scale=1'>
+    <link rel='stylesheet' href='css/estilos.css'>
+    <link rel='stylesheet' href='css/bootstrap.min.css'>
+    <link rel='stylesheet' href='css/fontawesome.css'>
     <title>Turnos</title>
 </head>
 <body>
-    <div class="app">
-        <div class="row m-0 vh-100 align-items-center justify-content-center">
-            <h3 class="text-center col-12 mb-5">Creación de módulo</h3>
-            <div class="col-4 justify-content-center identification-container">
-                <label for="autor">Autor</label>
-                <input type="text" v-model="author" class="form-control mb-3">
-                <label for="descripcion">Descripción</label>
-                <textarea class="form-control mb-3" v-model="description" rows="3"></textarea>
+    <div class='app'>
+        <div v-if='screens.active === "home"' :class='containerClasses'>
+            <div class='w-50'>
+                <menu-button v-for='(menu, index) in menus' 
+                    :text      = menu.text
+                    :icon      = menu.icon
+                    :screen    = menu.screen
+                    v-bind:key = index>
+                </menu-button>
+            </div>
+        </div>
+        <div v-if='screens.active === "stats"' :class='containerClasses'>
+            <back-button></back-button>
+        </div>
+        <div v-if='screens.active === "creator"' :class='containerClasses'>
+            <h3 class='text-center col-12 mb-5'>Creación de módulo</h3>
+            <div class='col-4 justify-content-center identification-container'>
+                <label for='autor'>Autor</label>
+                <input type='text' v-model='author' class='form-control mb-3'>
+                <label for='descripcion'>Descripción</label>
+                <textarea class='form-control mb-3' v-model='description' rows='3'></textarea>
                 <div>
-                    <label for="letra">Letra identificadora: <b>{{letter}}</b> </label>
+                    <label for='letra'>Letra identificadora: <b>{{letter}}</b> </label>
                 </div>
-                <div class="text-center mt-4">
-                    <button type="button" v-on:click="addModule" class="btn btn-primary">Crear módulo</button>
+                <div class='text-center mt-4'>
+                    <back-button></back-button>
+                    <button type='button' v-on:click='saveModule' class='w-25 btn btn-primary'>Crear módulo</button>
                 </div>
+            </div>
+        </div>
+        <div v-if='screens.active === "edit"' :class='containerClasses'>
+            <h3 class='text-center col-12 mb-5'>Editar módulo</h3>
+            <div class='col-4 justify-content-center identification-container'>
+                <ul>
+                    <li v-for='(module, index) in modules'>
+                        <button v-on:click='chooseModule(index)'>{{module.description}}</button> 
+                    </li>
+                </ul>
+                <back-button :home='true'></back-button>
+            </div>
+        </div>
+        <div v-if='screens.active === "editInputs"' :class='containerClasses'>
+            <h3 class='text-center col-12 mb-5'>Editar módulo</h3>
+            <div class='col-4 justify-content-center identification-container'>
+                <label for='autor'>Autor</label>
+                <input v-model='author' type='text' v-model='author' class='form-control mb-3'>
+                <label for='descripcion'>Descripción</label>
+                <textarea v-model='description' class='form-control mb-3' v-model='description' rows='3'></textarea>
+                <div>
+                    <label for='letra'>Letra identificadora: <b>{{letter}}</b> </label>
+                </div>
+                <div class='text-center mt-4'>
+                    <back-button></back-button>
+                    <button type='button' v-on:click='saveModule({edit: true})' class='w-25 btn btn-primary'>Guardar</button>
+                </div>
+            </div>
+        </div>
+        <div v-if='screens.active === "history"' :class='containerClasses'>
+            <div class='w-75'>
+                <table class='history-table table table-sm table-bordered'>
+                    <thead class='thead-dark'>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Módulo</th>
+                            <th>Tipo</th>
+                            <th>Fecha solicitud</th>
+                            <th>Tiempo de atención</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for='(turn, index) in turns'>
+                            <td>{{turn.user}}</td>
+                            <td>{{turn.module}}</td>
+                            <td>{{turn.turnType}}</td>
+                            <td>{{turn.date}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class='w-100'>
+                <back-button></back-button>
             </div>
         </div>
     </div>
@@ -29,7 +98,7 @@
     <script src='js/lib/qrcode.min.js'></script>
     <script src='js/lib/sweetalert2.js'></script>
     <script src='js/lib/jspdf.min.js'></script>
-    <script src="js/lib/vue.js"></script>
-    <script src="js/admin.js"></script>
+    <script src='js/lib/vue.js'></script>
+    <script src='js/admin.js'></script>
 </body>
 </html>

@@ -20,3 +20,8 @@
 .qr-container > img {
     margin: auto
 }
+
+.history-table {
+    height: 80%;
+    overflow-y: scroll;
+}

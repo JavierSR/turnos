@@ -30,7 +30,6 @@ const app = new Vue({
             dataType: 'json',
             contentType: 'application/json'
         }).done((response) => {
-            console.log(response)
             if (response.state && response.text.length) {
                 this.moduleList = response.text
             }
