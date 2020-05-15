@@ -159,5 +159,23 @@ module.exports = {
                 text     : 'No se encontró ningun módulo creado'
             })
         }
+    },
+    nextLetter: async (res) => {
+        const   modules      = await model.Module.find({})
+
+        console.log('modules', modules)
+        if (modules) {
+            //Inicia en 65 que es el codigo de la letra 'A', y le suma la cantidad de modulos existentes, es decir si hay 3 modulos ABC 
+            //devuelve 68 que es el codigo de la 'D'
+            response.success({
+                response : res,
+                text     : String.fromCharCode(modules.length + 65)
+            })
+        }
+        else {
+            response.error({
+                response : res
+            })
+        }
     }
 }

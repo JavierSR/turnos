@@ -22,4 +22,8 @@ router.post('/api/module', (req, res) => {
     controller.newModule(req.body, res)
 })
 
+router.get('/api/letter', (req, res) => {
+    controller.nextLetter(res)
+})
+
 module.exports = router

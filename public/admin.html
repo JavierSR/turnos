@@ -12,24 +12,16 @@
         <div class="row m-0 vh-100 align-items-center justify-content-center">
             <h3 class="text-center col-12 mb-5">Creación de módulo</h3>
             <div class="col-4 justify-content-center identification-container">
-                <form action="">
-                    <label for="letra">Letra identificadora</label>
-                    <select id="letra" class="form-control mb-3">
-                        <option selected></option>
-                        <script>
-                            for(var i = 65; i <= 90; i++) {
-                                document.write("<option>"+String.fromCharCode(i)+"</option>");
-                            }
-                        </script>
-                    </select>
-                    <label for="autor">Autor</label>
-                    <input type="text" id="autor" class="form-control mb-3">
-                    <label for="descripcion">Descripción</label>
-                    <textarea class="form-control mb-3" id="descripcion" rows="3"></textarea>
-                    <div class="text-center mt-4">
-                        <button type="button" onclick="addModule()" id="crearModulo" class="btn btn-primary">Crear módulo</button>
-                    </div>
-                </form>
+                <label for="autor">Autor</label>
+                <input type="text" v-model="author" class="form-control mb-3">
+                <label for="descripcion">Descripción</label>
+                <textarea class="form-control mb-3" v-model="description" rows="3"></textarea>
+                <div>
+                    <label for="letra">Letra identificadora: <b>{{letter}}</b> </label>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="button" v-on:click="addModule" class="btn btn-primary">Crear módulo</button>
+                </div>
             </div>
         </div>
     </div>

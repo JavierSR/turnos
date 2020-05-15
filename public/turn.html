@@ -19,11 +19,11 @@
                 </div>
                 <number-button v-for="index in 9" :number=index v-bind:key=index></number-button>
                 <div class="col-4 my-2" >
-                    <button v-on:click="eraseNumber" class="col-8 btn-lg btn-primary"><i class="fas fa-backspace"></i></button>
+                    <button v-on:click="eraseNumber" class="col-8 btn-lg btn-danger"><i class="fas fa-backspace"></i></button>
                 </div>
                 <number-button number="0"></number-button>
                 <div class="col-4 my-2">
-                    <button v-on:click="validateIdentification()" class="col-8 btn-lg btn-primary"><i class="fas fa-check-circle"></i></button>
+                    <button v-on:click="validateIdentification()" class="col-8 btn-lg btn-success"><i class="fas fa-check-circle"></i></button>
                 </div>
             </div>
         </div>
