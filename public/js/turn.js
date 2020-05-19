@@ -6,7 +6,7 @@ Vue.component('button-module', {
             this.$parent.changeScreen('printTurn')
         }
     },
-    template : `<div class="col-6">
+    template : `<div class="col-6 mb-3">
                     <button  v-on:click="displayTurnScreen" class="btn-lg btn-block btn-primary">
                         {{description}}
                     </button>
