@@ -41,15 +41,11 @@
             </div>
         </div>
         <div v-if='screens.active === "edit"' :class='containerClasses'>
-            <h3 class='text-center col-12 mb-5'>Editar módulo</h3>
-            <div class='col-4 justify-content-center identification-container'>
-                <ul>
-                    <li v-for='(module, index) in modules'>
-                        <button v-on:click='chooseModule(index)'>{{module.description}}</button> 
-                    </li>
-                </ul>
-                <back-button :home='true'></back-button>
+            <div class='justify-content-center '>
+                <h3 class='text-center col-12 pb-5 mb-5'>Editar módulo</h3>
+                <button v-for='(module, index) in modules' class="col-4 m-2 btn btn-lg btn-primary" v-on:click='chooseModule(index)'>{{module.description}}<i class="fas fa-edit float-right"></i></button>
             </div>
+            <back-button :home='true'></back-button>
         </div>
         <div v-if='screens.active === "editInputs"' :class='containerClasses'>
             <h3 class='text-center col-12 mb-5'>Editar módulo</h3>
