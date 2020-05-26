@@ -7,9 +7,14 @@ const turnSchema = new Schema({
         module      : String,
         turnNumber  : String, 
         requestTime : Date,
-        active      : Boolean,
-        attendTime  : Date,
-        finishTime  : Date
+        attendTime  : {
+                type: Date,
+                default: null
+        },
+        finishTime  : {
+                type: Date,
+                default: null
+        }
 })
 
 const moduleSchema = new Schema({

@@ -22,7 +22,21 @@
             </div>
         </div>
         <div v-if='screens.active === "stats"' :class='containerClasses'>
-            <back-button></back-button>
+            <h3 class='w-100'>Estadísticas</h3>
+            <div class='row w-75'>
+                <div class='col-xs-12 col-sm-6 col-lg-4 mb-3 p-3' v-for='(module, index) in modules'>
+                    <div class='shadow p-3 bg-white rounded'>
+                        <b>Modulo {{module.moduleLetter}}: </b> {{module.description}}
+                        <p>
+                            Total turnos solicitados: {{module.turns}}<br>
+                            Promedio de tiempo en atención: {{module.average}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class='w-100'>
+                <back-button></back-button>
+            </div>
         </div>
         <div v-if='screens.active === "creator"' :class='containerClasses'>
             <h3 class='text-center col-12 mb-5'>Creación de módulo</h3>
@@ -41,7 +55,7 @@
             </div>
         </div>
         <div v-if='screens.active === "edit"' :class='containerClasses'>
-            <div class='justify-content-center '>
+            <div class='justify-content-center'>
                 <h3 class='text-center col-12 pb-5 mb-5'>Editar módulo</h3>
                 <button v-for='(module, index) in modules' class="col-4 m-2 btn btn-lg btn-primary" v-on:click='chooseModule(index)'>{{module.description}}<i class="fas fa-edit float-right"></i></button>
             </div>
@@ -64,6 +78,9 @@
             </div>
         </div>
         <div v-if='screens.active === "history"' :class='containerClasses' class="mt-5">
+            <div class='w-100'>
+                <back-button></back-button>
+            </div>
             <div class='w-75 mt-5'>
                 <table class='history-table table table-sm table-bordered'>
                     <thead class='thead-dark'>
@@ -80,14 +97,11 @@
                             <td>{{turn.user}}</td>
                             <td>{{turn.module}}</td>
                             <td>{{turn.turnType}}</td>
-                            <td>{{turn.date}}</td>
-                            <td></td>
+                            <td>{{turn.parsedDate}}</td>
+                            <td>{{turn.time}}</td>
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class='w-100 mb-5 pb-5'>
-                <back-button></back-button>
             </div>
         </div>
     </div>
@@ -96,6 +110,7 @@
     <script src='js/lib/sweetalert2.js'></script>
     <script src='js/lib/jspdf.min.js'></script>
     <script src='js/lib/vue.js'></script>
+    <script src='js/lib/moment.min.js'></script>
     <script src='js/admin.js'></script>
 </body>
 </html>

@@ -17,13 +17,13 @@
 
         <div v-if="screens.active === 'moduleBody'" class="row m-0 vh-100 text-center align-items-center justify-content-center">
             <h3 id="estado" class="col-12">Esperando turno</h3>
-            <div class="col-12">
+            <div v-if="turnQueue" class="col-12">
                 <p>Esperando por:</p>
-                <h1 class="turnoact">{{selectedModule.moduleLetter}}-1</h2>
+                <h2 class="turnoact">{{selectedModule.moduleLetter}}-{{currentTurn}}</h2>
             </div>
-            <div class="w-50 row justify-content-center">
+            <div v-if="turnQueue" class="w-50 row justify-content-center">
                 <button v-on:click="arrive" id="attend" class="col-4 btn-lg btn-primary disabled">En modulo</button>
-                <button class="col-6 ml-5 btn-lg btn-primary">Siguiente</button>
+                <button v-on:click="nextTurn"  class="col-6 ml-5 btn-lg btn-primary">Siguiente</button>
             </div>
             <div class='w-100'>
                 <p>Modulo {{selectedModule.moduleLetter}}: {{selectedModule.description}}</p>
@@ -33,6 +33,7 @@
     </div>
     <script src='js/lib/jquery.min.js'></script>
     <script src="js/lib/vue.js"></script>
+    <script src="js/lib/sweetalert2.js"></script>
     <script src="js/attend.js"></script>
 </body>
 </html>

@@ -10,8 +10,16 @@ router.post('/api/turn', (req, res) => {
     controller.newTurn(req.body, res)
 })
 
-router.patch('/api/turn', (req, res) => {
+router.post('/api/nextTurn', (req, res) => {    
+    controller.getNextTurn(req.body, res)
+})
+
+router.post('/api/finishTurn', (req, res) => {    
     controller.finishTurn(req.body, res)
+})
+
+router.patch('/api/turn', (req, res) => {
+    controller.attendTurn(req.body, res)
 })
 
 router.get('/api/turnsHistory', (req, res) => {

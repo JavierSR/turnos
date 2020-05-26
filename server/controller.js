@@ -20,7 +20,7 @@ const getYesterdayDate = () => {
 const getTurnNumber = async (moduleId) =>  {
     //Obtiene la cantidad de turnos generados hoy para el modulo seleccionado
     let turnsCount = await model.Turn.countDocuments({
-        date: {
+        requestTime: {
             $gt: getYesterdayDate()
         },
         module: moduleId
@@ -48,8 +48,7 @@ module.exports = {
                   turn       = new model.Turn({
                                 ...userData,
                                 requestTime : new Date(),
-                                turnNumber  : turnNumber,
-                                active      : true
+                                turnNumber  : turnNumber
                             })
 
             turn.save()
@@ -60,7 +59,7 @@ module.exports = {
             })
         }
     },
-    finishTurn: async (userData, res) => {
+    attendTurn: async (userData, res) => {
         const isValidTurn = validations.checkTurnNumber(userData)
         if (!isValidTurn.state) {
             response.error({
@@ -69,30 +68,29 @@ module.exports = {
                 text         : isValidTurn.text,
                 errorDetails : isValidTurn.errorDetails
             })
+            return
+        }
+        
+        const turn = await model.Turn.findOne({
+            requestTime: {
+                $gt: getYesterdayDate()
+            },
+            turnNumber : userData.turnNumber
+        })
+        
+        if(!turn) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : 'El turno enviado no existe'
+            })
         }
         else {
-            const turn = await model.Turn.findOne({
-                date: {
-                    $gt: getYesterdayDate()
-                },
-                turnNumber : userData.turnNumber
+            turn.attendTime = new Date()
+            turn.save()
+            response.success({
+                response: res
             })
-            
-            if(!turn) {
-                response.error({
-                    response     : res,
-                    status       : 400,
-                    text         : 'El turno enviado no existe'
-                })
-            }
-            else {
-                turn.active = false
-                turn.save()
-                console.log('[controller] Turno despachado ', userData.turnNumber)
-                response.success({
-                    response: res
-                })
-            }
         }
     },
     turnDetails: async (userData, res) => {
@@ -131,9 +129,10 @@ module.exports = {
     },
     getTurns: async (res) => {
         const turns = await model.Turn.find({})
-
+        console.log('turns', turns)
+        
         if(turns) {
-            console.log(`[controller] Recuperando información de ${turns.length} módulo${turns.length === 1 ? '' : 's'}`)
+            console.log(`[controller] Recuperando información de ${turns.length} turno${turns.length === 1 ? '' : 's'}`)
             response.success({
                 response : res,
                 text     : turns
@@ -144,6 +143,69 @@ module.exports = {
                 response : res
             })
         }
+    },
+    getNextTurn: async (userData, res) => {
+        //Obtiene la cantidad de turnos del dia de hoy del modulo especificado y que ya fueron atendidos 
+        const attendedTurns = await model.Turn.countDocuments({
+            requestTime: {
+                $gt: getYesterdayDate()
+            },
+            module: userData.moduleId,
+            attendTime: {
+                $ne: null
+            }
+        })
+
+        if(!Number.isInteger(attendedTurns)) {
+            response.error({
+                response : res
+            })
+            return
+        }
+
+        //Si esta tomado por un usuario lo retorna
+        const turn = await model.Turn.findOne({
+            requestTime: {
+                $gt: getYesterdayDate()
+            },
+            turnNumber: `${userData.moduleId}-${attendedTurns + 1}`
+        })
+
+        if(!turn) {
+            response.error({
+                response : res,
+                status   : 200,
+                text     : 'No hay turnos en espera para el módulo seleccionado' 
+            })
+            return
+        }
+
+        response.success({
+            response : res,
+            text     : attendedTurns + 1
+        })
+    },
+    finishTurn: async (userData, res) => {
+        const turn = await model.Turn.findOne({
+            requestTime: {
+                $gt: getYesterdayDate()
+            },
+            turnNumber: userData.turnNumber
+        })
+
+        if(!turn) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : 'El turno enviado no existe'
+            })
+        }
+
+        turn.finishTime = new Date()
+        turn.save()
+        response.success({
+            response : res,
+        })
     },
     newModule: async (userData, res) => {
         const module = new model.Module({
@@ -176,9 +238,36 @@ module.exports = {
 
         if(modulesCount) {
             console.log(`[controller] Recuperando información de ${modulesCount} módulo${modulesCount > 1 ? 's' : ''}`)
+
+            let moduleList = []
+            for(const moduleItem of modules) {
+                const turns = await model.Turn.find({
+                    module:  moduleItem.moduleLetter
+                })
+                let totalTime = 0, validTurns = 0
+                for(const turn of turns) {
+                    if(turn.attendTime && turn.finishTime) {
+                        let minutes = new Date(turn.finishTime).getMinutes() - new Date(turn.attendTime).getMinutes()
+                        if(!minutes) {
+                            minutes++
+                        }
+                        totalTime += minutes
+                        validTurns++
+                    }
+                }
+                moduleList = [...moduleList, {
+                    moduleLetter : moduleItem.moduleLetter,
+                    description  : moduleItem.description,
+                    author       : moduleItem.author,
+                    created      : moduleItem.created,
+                    average      : validTurns !== 0 ? totalTime / validTurns : 0,
+                    turns        : validTurns
+                }]
+            }
+            
             response.success({
                 response : res,
-                text     : modules
+                text     : moduleList
             })
         }
         else {
@@ -204,5 +293,5 @@ module.exports = {
                 response : res
             })
         }
-    }
+    },
 }

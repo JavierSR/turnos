@@ -59,7 +59,12 @@ Vue.component('button-get-turn', {
                         title : 'Escanee con la aplicación',
                         html  : '<div class="qr-container"></div>'
                     })
-                    new QRCode($('.qr-container')[0], response.text)
+                    new QRCode($('.qr-container')[0], JSON.stringify({
+                        key  : '8cde8ee72f76029e58b2b89c8789842d',
+                        turn : response.text,
+                        cc   : this.$parent.identification
+                        })
+                    )
                 }
                 else if (sendData.turnType === 'print') {
                     const pdf = new jsPDF()

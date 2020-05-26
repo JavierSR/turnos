@@ -17,9 +17,6 @@ Vue.component('menu-button',{
     props   : ['screen', 'text', 'icon'],
     methods : {
         changeScreen: function (screen) {
-            if(screen === 'edit') {
-                this.$parent.loadModuleList()
-            }
             this.$parent.changeScreen(screen)
         }
     },
@@ -46,7 +43,7 @@ const app = new Vue({
             {text: 'Editar módulo', icon: 'edit', screen: 'edit'},
             {text: 'Historial de turnos solicitados', icon: 'list-alt', screen: 'history'},
         ],
-        modules: [],
+        modules : [],
         selectedModule: null
     },
     methods: {
@@ -84,6 +81,7 @@ const app = new Vue({
                     if(!mode.edit) {
                         this.resetModule()
                     }
+                    this.loadModules()
                 }
                 else {
                     Swal.fire({
@@ -119,7 +117,6 @@ const app = new Vue({
                 dataType: 'json',
                 contentType: 'application/json'
             }).done((response) => {
-                console.log(response)
                 if (response.state && response.text) {
                     this.letter = response.text
                 }
@@ -137,7 +134,37 @@ const app = new Vue({
                 }) 
             })
         },
-        loadModuleList: function() {
+        getTurnHistorial: function() {
+            $.ajax({
+                url: 'http://localhost:3000/api/turnsHistory',    
+                method: 'get',               
+                dataType: 'json',
+                contentType: 'application/json'
+            }).done((response) => {
+                if (response.state && response.text.length) {
+                    this.turns = response.text
+                    this.turns.map((value) => {
+                        value.parsedDate = moment(value.requestTime).format('YYYY-MM-DD')
+                        if(value.attendTime && value.finishTime) {
+                            let minutes = new Date(value.finishTime).getMinutes() - new Date(value.attendTime).getMinutes()
+                            //Si el tiempo de atencion no alcanza el minuto redondea a 1
+                            if(!minutes) {
+                                minutes++
+                            }
+                            value.time = `${minutes} minuto${minutes === 1 ? '' : 's'}`
+                        }
+                        return value
+                    })
+                }
+            }).fail((response) => {
+                console.error(response)
+                Swal.fire({
+                    text: 'No se obtuvo respuesta del servidor',
+                    icon:  'error'
+                })
+            })
+        },
+        loadModules: function() {
             $.ajax({
                 url: 'http://localhost:3000/api/module',    
                 method: 'get',               
@@ -151,27 +178,8 @@ const app = new Vue({
                     Swal.fire({
                         title : 'No se obtuvieron modulos',
                         text  : 'Un administrador debe crear los modulos de atención',
-                        icon  : 'warnning'
+                        icon  : 'warning'
                     }) 
-                }
-            }).fail((response) => {
-                console.error(response)
-                Swal.fire({
-                    text: 'No se obtuvo respuesta del servidor',
-                    icon:  'error'
-                })
-            })
-        },
-        getTurnHistorial: function() {
-            $.ajax({
-                url: 'http://localhost:3000/api/turnsHistory',    
-                method: 'get',               
-                dataType: 'json',
-                contentType: 'application/json'
-            }).done((response) => {
-                console.log(response)
-                if (response.state && response.text.length) {
-                    this.turns = response.text
                 }
             }).fail((response) => {
                 console.error(response)
@@ -185,5 +193,6 @@ const app = new Vue({
     mounted: function() {
         this.letter = this.getNextLetter()
         this.turns  = this.getTurnHistorial()
+        this.loadModules()
     }
 })
