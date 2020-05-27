@@ -2,7 +2,7 @@ const   express     = require('express'),
         router      = express.Router()
         controller  = require('./controller')
 
-router.get('/api/turn', (req, res) => {
+router.post('/api/turnDetails', (req, res) => {
     controller.turnDetails(req.body, res)
 })
 

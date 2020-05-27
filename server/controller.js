@@ -94,38 +94,45 @@ module.exports = {
         }
     },
     turnDetails: async (userData, res) => {
-        const isValidTurn = validations.checkTurnNumber(userData)
-        if (!isValidTurn.state) {
+        //request desde la app
+        if (!userData.cc || !userData.turn) {
             response.error({
                 response     : res,
                 status       : 400,
-                text         : isValidTurn.text,
-                errorDetails : isValidTurn.errorDetails
+                text         : 'Cédula y turno son datos obligatorios'
             })
+            return
         }
-        else {
-            const turn = await model.Turn.findOne({
-                requestTime: {
-                    $gt: getYesterdayDate()
-                },
-                turnNumber : userData.turnNumber
+        const turn = await model.Turn.findOne({
+            requestTime: {
+                $gt: getYesterdayDate()
+            },
+            turnNumber : userData.turn
+        })
+        
+        if(!turn) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : 'El turno enviado no existe'
             })
-            
-            if(!turn) {
-                response.error({
-                    response     : res,
-                    status       : 400,
-                    text         : 'El turno enviado no existe'
-                })
-            }
-            else {
-                console.log('[controller] Devolviendo información de turno ', turn)
-                response.success({
-                    response: res,
-                    text    : JSON.stringify(turn)
-                })
-            }
+            return
         }
+
+        if(turn.user !== userData.cc) {
+            response.error({
+                response     : res,
+                status       : 400,
+                text         : 'Usted no es el propietario del turno'
+            })
+            return
+        }
+        
+        console.log('[controller] Devolviendo información de turno ', turn)
+        response.success({
+            response: res,
+            text    : JSON.stringify(turn)
+        })
     },
     getTurns: async (res) => {
         const turns = await model.Turn.find({})
